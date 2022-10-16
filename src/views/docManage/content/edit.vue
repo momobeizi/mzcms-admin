@@ -21,7 +21,7 @@
           </el-select>
         </el-form-item>
         <el-form-item label="缩略图">
-          <el-upload class="avatar-uploader" action="/" :show-file-list="false" :before-upload="beforeUpload">
+          <el-upload class="avatar-uploader" action :show-file-list="false" :before-upload="beforeUpload">
             <img v-if="condition.imgUrl" :src="condition.imgUrl" class="avatar">
             <i v-else class="el-icon-plus avatar-uploader-icon"></i>
           </el-upload>
@@ -37,6 +37,7 @@
 
 <script>
 import { findOneContent } from '@/api/docManage.js'
+import { uploadFile } from '@/api/common.js'
 export default {
   data () {
     return {
@@ -57,6 +58,21 @@ export default {
       findOneContent({ id: this.id }).then(res => {
 
       })
+    },
+    // 上传图片
+    beforeUpload (file) {
+      console.log(file)
+      let submit = new FormData()
+      submit.append("file", file.raw)
+      console.log(submit)
+      uploadFile(submit).then(res => {
+        this.condition.imgUrl = res.data
+      })
+      return false
+    },
+    // 提交文章
+    onSubmit () {
+
     }
   }
 }

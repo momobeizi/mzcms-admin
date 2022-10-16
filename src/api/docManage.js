@@ -70,5 +70,3 @@ export function findOneContent (data) {
     data
   })
 }
-
-
