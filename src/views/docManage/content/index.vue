@@ -3,7 +3,7 @@
     <div class="mz-search-container">
       <el-form :model="condition">
         <el-form-item label="文章名称:" prop="type">
-          <el-input v-model.trim="condition.userName" placeholder="请输入文章名称" clearable></el-input>
+          <el-input v-model.trim="condition.title" placeholder="请输入文章名称" clearable></el-input>
         </el-form-item>
         <el-form-item>
           <el-button type="primary" icon="el-icon-search" @click="search" plain> 快速搜索
@@ -65,7 +65,7 @@ export default {
         pageNum: 1,
         pageSize: 10,
         total: 0,
-        userName: ''
+        title: ''
       },
       list: [],
       CategoryList: [] // 分类列表
