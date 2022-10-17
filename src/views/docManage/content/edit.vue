@@ -1,6 +1,8 @@
 <template>
   <div class="edit-content-container">
-    <div class="content-left"></div>
+    <div class="content-left">
+      <mavon-editor v-model="condition.content" ref=md @imgAdd="mdAddImage" @imgDel="mdDelImage"></mavon-editor>
+    </div>
     <div class="content-right">
       <el-form ref="form" :model="condition" label-width="80px">
         <el-form-item label="标题">
@@ -36,20 +38,29 @@
 </template>
 
 <script>
-import { findOneContent } from '@/api/docManage.js'
+import { findOneContent, addContent } from '@/api/docManage.js'
 import { uploadFile } from '@/api/common.js'
 export default {
   data () {
     return {
       id: '',
       condition: {
-
+        title: '',// 文章标题
+        abstract: '',// 摘要
+        content: '',// 内容
+        status: '',// 状态
+        contentCategory: '',// 分类
+        keywords: '',// 关键字
+        imgUrl: '',// 封面图片
+        readNum: '',// 是否推荐
+        label: '',// 标签
+        contentType: '',// 文章内容类型
       }
     }
   },
   created () {
     if (this.$route.query.id) {
-      this.id = this.$route.query.id
+      this.condition.id = this.$route.query.id
       this.getContentInfo()
     }
   },
@@ -62,17 +73,35 @@ export default {
     // 上传图片
     beforeUpload (file) {
       console.log(file)
-      let submit = new FormData()
-      submit.append("file", file.raw)
-      console.log(submit)
-      uploadFile(submit).then(res => {
-        this.condition.imgUrl = res.data
+      let formdata = new FormData()
+      formdata.append("file", file)
+      uploadFile(formdata).then(url => {
+        this.condition.imgUrl = url
       })
       return false
     },
     // 提交文章
     onSubmit () {
-
+      if (this.condition.id) {
+        console.log("编辑")
+      } else {
+        addContent(this.condition).then(res => {
+          console.log(res)
+        })
+      }
+    },
+    // md上传图片
+    mdAddImage (pos, $file) {
+      // 第一步.将图片上传到服务器.
+      var formdata = new FormData();
+      formdata.append('file', $file);
+      uploadFile(formdata).then((url) => {
+        this.$refs.md.$img2Url(pos, url);
+      })
+    },
+    // md删除图片
+    mdDelImage (imgArray) {
+      console.log(imgArray[0])
     }
   }
 }
@@ -89,6 +118,9 @@ export default {
     height: 800px;
     padding: 10px;
     background: #fbfbfb;
+    .markdown-body {
+      height: 100%;
+    }
   }
   .content-right {
     width: 24%;

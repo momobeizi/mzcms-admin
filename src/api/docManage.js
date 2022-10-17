@@ -70,3 +70,12 @@ export function findOneContent (data) {
     data
   })
 }
+
+// 添加文章
+export function addContent (data) {
+  return request({
+    url: '/content/add',
+    method: 'post',
+    data
+  })
+}

@@ -9,7 +9,10 @@ import '@/style/index.scss'
 import moment from 'moment'
 import "@/components/index.js"; // 全局组件
 import "@/assets/js/iconfont.js"
+import mavonEditor from 'mavon-editor'
+import 'mavon-editor/dist/css/index.css'
 
+Vue.use(mavonEditor)
 Vue.config.productionTip = false
 Vue.use(Element, {
   size: 'medium'
