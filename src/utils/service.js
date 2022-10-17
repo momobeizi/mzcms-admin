@@ -33,7 +33,6 @@ service.interceptors.response.use(
     } else if (response.data.code === 0) {
       return response.data.data;
     } else {
-      console.log(22222)
       // 登录失效
       if (response.data.code === 400) {
         Message({

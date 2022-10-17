@@ -38,7 +38,6 @@ function permissionsControl (to, from, next) {
   if (whiteList.indexOf(to.path) !== -1 || to.meta.api) { // 在免登录白名单，直接进入
     next();
   } else {
-    console.log(store.getters)
     if (store.getters.permission_routers.length === 0) { // 没有用户信息，请求获得用户信息
       store.dispatch('GetUserInfo').then(() => {
         // router.addRoutes(store.getters.permission_routers); //动态添加可访问路由表
@@ -48,7 +47,6 @@ function permissionsControl (to, from, next) {
         });
       })
     } else {
-      console.log("sssss1")
       next();
     }
   }

@@ -8,7 +8,6 @@ function resolveRouter (router, basePath) {
     }
     routerItem.webLink = `${basePath === '/' ? '' : basePath}${routerItem.path.indexOf('/') ? '/' : ''}${routerItem.path}`
   });
-  console.log(router)
 }
 
 const user = {
@@ -20,7 +19,6 @@ const user = {
   mutations: {
     //设置用户信息
     SET_USERINFO: (state, res) => {
-      console.log(res)
       state.userInfo = res.data
     },
     // 设置用户菜单权限

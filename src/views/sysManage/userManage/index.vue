@@ -98,7 +98,6 @@ export default {
     },
     getUserList () {
       getUserList(this.condition).then(res => {
-        console.log(res)
         this.list = res.list
         this.condition.total = res.count
       })

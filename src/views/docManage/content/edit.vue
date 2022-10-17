@@ -22,6 +22,9 @@
             <el-option label="撤回" value="2"></el-option>
           </el-select>
         </el-form-item>
+        <el-form-item label="分类">
+          <el-cascader v-model="condition.contentCategory" :options="options" :show-all-levels="false"></el-cascader>
+        </el-form-item>
         <el-form-item label="缩略图">
           <el-upload class="avatar-uploader" action :show-file-list="false" :before-upload="beforeUpload">
             <img v-if="condition.imgUrl" :src="condition.imgUrl" class="avatar">
@@ -38,7 +41,7 @@
 </template>
 
 <script>
-import { findOneContent, addContent } from '@/api/docManage.js'
+import { findOneContent, addContent, getAllContentCategory } from '@/api/docManage.js'
 import { uploadFile } from '@/api/common.js'
 export default {
   data () {
@@ -65,6 +68,23 @@ export default {
     }
   },
   methods: {
+    // 获取所有类别
+    getAllContentCategory () {
+      getAllContentCategory().then(res => {
+        this.list = this.handleCategoryList(res)
+        console.log(this.list)
+      })
+    },
+    // 处理层级结构数组
+    handleCategoryList (list) {
+      let data = list.filter(item => {
+        item.children = list.filter(e => {
+          return item.id == e.parentId
+        })
+        return item.parentId == 0
+      })
+      return data.length > 0 ? data : list;
+    },
     getContentInfo () {
       findOneContent({ id: this.id }).then(res => {
 
@@ -72,7 +92,6 @@ export default {
     },
     // 上传图片
     beforeUpload (file) {
-      console.log(file)
       let formdata = new FormData()
       formdata.append("file", file)
       uploadFile(formdata).then(url => {

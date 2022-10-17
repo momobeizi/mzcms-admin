@@ -48,7 +48,6 @@ export default {
         const router = routers[i];
         if (router.webLink == matchPath) {
           this.activeIndex = matchPath;
-          console.log(this.activeIndex)
           break;
         }
         if (router.children && router.children.length) {

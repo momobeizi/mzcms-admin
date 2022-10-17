@@ -84,7 +84,6 @@ export default {
   methods: {
     // 添加或者编辑文章
     editArticle (id) {
-      console.log(id)
       this.$router.push({
         name: 'editContent',
         query: {
@@ -126,7 +125,6 @@ export default {
     },
     getList () {
       getContentList(this.condition).then(res => {
-        console.log(res)
         this.list = res.list
         this.condition.total = res.count
       })

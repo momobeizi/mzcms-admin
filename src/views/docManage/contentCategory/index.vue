@@ -123,9 +123,9 @@ export default {
     handleCategoryList (list) {
       let data = list.filter(item => {
         item.children = list.filter(e => {
-          return item.id === e.parentId
+          return item.id == e.parentId
         })
-        return !item.parentId
+        return item.parentId == 0
       })
       return data.length > 0 ? data : list;
     },
