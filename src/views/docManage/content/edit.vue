@@ -9,7 +9,22 @@
           <el-input v-model="condition.title"></el-input>
         </el-form-item>
         <el-form-item label="摘要">
-          <el-input type="textarea" :rows="2" placeholder="请输入内容" v-model="condition.abstract"></el-input>
+          <el-input type="textarea" :rows="2" placeholder="请输入摘要" v-model="condition.abstract"></el-input>
+        </el-form-item>
+        <el-form-item label="关键字">
+          <el-input placeholder="请输入关键字" v-model="condition.keywords"></el-input>
+        </el-form-item>
+        <el-form-item label="标签">
+          <el-input placeholder="请输入标签" v-model="condition.label"></el-input>
+        </el-form-item>
+        <el-form-item label="阅读数">
+          <el-input placeholder="请输入阅读数" v-model="condition.readNum"></el-input>
+        </el-form-item>
+        <el-form-item label="是否推荐">
+          <el-radio-group v-model="condition.recommend">
+            <el-radio :label="0">否</el-radio>
+            <el-radio :label="1">是</el-radio>
+          </el-radio-group>
         </el-form-item>
         <el-form-item label="内容类型">
           <el-radio v-model="condition.contentType" label="markdown">markdown</el-radio>
@@ -17,13 +32,14 @@
         </el-form-item>
         <el-form-item label="状态">
           <el-select v-model="condition.status" placeholder="请选择状态">
-            <el-option label="草稿" value="0"></el-option>
-            <el-option label="已发布" value="1"></el-option>
-            <el-option label="撤回" value="2"></el-option>
+            <el-option label="草稿" :value="0"></el-option>
+            <el-option label="已发布" :value="1"></el-option>
+            <el-option label="撤回" :value="2"></el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="分类">
-          <el-cascader v-model="condition.contentCategory" :options="options" :show-all-levels="false"></el-cascader>
+          <el-cascader v-model="condition.contentCategory" :options="list" :props="cascaderProps"
+            :show-all-levels="false"></el-cascader>
         </el-form-item>
         <el-form-item label="缩略图">
           <el-upload class="avatar-uploader" action :show-file-list="false" :before-upload="beforeUpload">
@@ -56,8 +72,16 @@ export default {
         keywords: '',// 关键字
         imgUrl: '',// 封面图片
         readNum: '',// 是否推荐
+        recommend: 0, // 是否推荐
         label: '',// 标签
         contentType: '',// 文章内容类型
+      },
+      list: [],
+      cascaderProps: {
+        value: 'id',
+        label: 'name',
+        children: 'children',
+        emitPath: false
       }
     }
   },
@@ -66,6 +90,7 @@ export default {
       this.condition.id = this.$route.query.id
       this.getContentInfo()
     }
+    this.getAllContentCategory()
   },
   methods: {
     // 获取所有类别
@@ -81,13 +106,17 @@ export default {
         item.children = list.filter(e => {
           return item.id == e.parentId
         })
+        if (item.children.length == 0) {
+          delete item.children
+        }
         return item.parentId == 0
       })
       return data.length > 0 ? data : list;
     },
     getContentInfo () {
-      findOneContent({ id: this.id }).then(res => {
-
+      findOneContent({ id: this.condition.id }).then(res => {
+        this.condition = res;
+        console.log(this.condition)
       })
     },
     // 上传图片
@@ -104,8 +133,11 @@ export default {
       if (this.condition.id) {
         console.log("编辑")
       } else {
-        addContent(this.condition).then(res => {
-          console.log(res)
+        addContent(this.condition).then(() => {
+          this.$message.success('保存成功')
+          this.$router.push({
+            name: 'contentManage'
+          })
         })
       }
     },
