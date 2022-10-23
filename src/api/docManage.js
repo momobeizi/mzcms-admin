@@ -79,3 +79,13 @@ export function addContent (data) {
     data
   })
 }
+
+// 编辑文章
+export function editContent (data) {
+  return request({
+    url: '/content/edit',
+    method: 'post',
+    data
+  })
+}
+

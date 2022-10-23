@@ -34,7 +34,7 @@
           <el-select v-model="condition.status" placeholder="请选择状态">
             <el-option label="草稿" :value="0"></el-option>
             <el-option label="已发布" :value="1"></el-option>
-            <el-option label="撤回" :value="2"></el-option>
+            <el-option label="撤回" :value="2"></el-option>     
           </el-select>
         </el-form-item>
         <el-form-item label="分类">
@@ -57,7 +57,7 @@
 </template>
 
 <script>
-import { findOneContent, addContent, getAllContentCategory } from '@/api/docManage.js'
+import { findOneContent, addContent, getAllContentCategory, editContent } from '@/api/docManage.js'
 import { uploadFile } from '@/api/common.js'
 export default {
   data () {
@@ -131,10 +131,15 @@ export default {
     // 提交文章
     onSubmit () {
       if (this.condition.id) {
-        console.log("编辑")
+        editContent(this.condition).then(() => {
+          this.$message.success('保存成功')
+          this.$router.push({
+            name: 'contentManage'
+          })
+        })
       } else {
         addContent(this.condition).then(() => {
-          this.$message.success('保存成功')
+          this.$message.success('添加成功')
           this.$router.push({
             name: 'contentManage'
           })
