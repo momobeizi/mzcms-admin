@@ -12,6 +12,11 @@ import "@/assets/js/iconfont.js"
 import mavonEditor from 'mavon-editor'
 import 'mavon-editor/dist/css/index.css'
 
+import * as resultObj from '@/utils';
+
+Object.keys(resultObj).forEach(key => {
+  Vue.prototype['$' + key] = resultObj[key];
+});
 Vue.use(mavonEditor)
 Vue.config.productionTip = false
 Vue.use(Element, {

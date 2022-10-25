@@ -17,4 +17,12 @@ export function uploadFile (data) {
   })
 }
 
+// 下载大文件
+export function downloadBigFile (data) {
+  return request({
+    url: '/setting/downloadBigFile',
+    method: 'post',
+    data
+  })
+}
 
